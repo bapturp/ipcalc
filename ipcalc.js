@@ -12,7 +12,6 @@ import {
     cidrToNumber,
 } from "./conversion.js";
 
-// run script once content is loaded
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#check").addEventListener("click", () => {
         initFeedback()
@@ -58,7 +57,7 @@ function parseInput(input){
     let ipInfo = {}
 
     ipInfo['address'] = addrToNumber(input[0]);
-    ipInfo['subnet_mask'] = cidrToNumber(input[1]);
+    ipInfo['subnetMask'] = cidrToNumber(input[1]);
 
     return ipInfo;
 }
@@ -71,18 +70,18 @@ function initFeedback(){
 
 function calcIpv4(input) {
     let ipInfo = parseInput(input);
-    ipInfo['network'] = calcNetwork(ipInfo.address, ipInfo.subnet_mask);
-    ipInfo['wildcard'] = calcWildcard(ipInfo.subnet_mask);
-    ipInfo['broadcast'] = calcBroadcast(ipInfo.network, ipInfo.subnet_mask);
+    ipInfo['network'] = calcNetwork(ipInfo.address, ipInfo.subnetMask);
+    ipInfo['wildcard'] = calcWildcard(ipInfo.subnetMask);
+    ipInfo['broadcast'] = calcBroadcast(ipInfo.network, ipInfo.subnetMask);
     ipInfo['firstAddress'] = calcFirstAddr(ipInfo.network);
-    ipInfo['lastAddress'] = calcLastAddr(ipInfo.network, ipInfo.subnet_mask);
-    ipInfo['rangeLength'] = calcRangeLength(ipInfo.subnet_mask);
+    ipInfo['lastAddress'] = calcLastAddr(ipInfo.network, ipInfo.subnetMask);
+    ipInfo['rangeLength'] = calcRangeLength(ipInfo.subnetMask);
 
     return ipInfo;
 }
 
 function renderIpv4(ipInfo){
-    document.querySelector("#netmask").innerHTML = numberToAddr(ipInfo.netmask);
+    document.querySelector("#netmask").innerHTML = numberToAddr(ipInfo.subnetMask);
     document.querySelector("#network").innerHTML = numberToAddr(ipInfo.network);
     document.querySelector("#wildcard").innerHTML = numberToAddr(ipInfo.wildcard);
     document.querySelector("#broadcast").innerHTML = numberToAddr(ipInfo.broadcast);
