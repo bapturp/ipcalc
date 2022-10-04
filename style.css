@@ -29,13 +29,14 @@ section {
 section input,
 button {
   padding: 0.5em 1em;
+  border: 1px solid black;
+  border-radius: 0;
   font: inherit;
   color: inherit;
   background: none;
 }
 
 section input {
-  border: 1px solid black;
   flex: 1;
 }
 
