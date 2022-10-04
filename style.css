@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@400;500;700");
+@import url("https://fonts.googleapis.com/css2?family=VT323");
+
+body {
+  font-family: "Noto Sans Mono";
+  max-width: 32em;
+  height: 98vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+
+}
+
+h1 {
+  font-family: "VT323";
+  font-size: 3em;
+  text-align: center;
+}
+
+section {
+  flex: 1 1 100%; /* flex-grow: 1; flex-shrink: 1; flex-basis: 100%; */
+}
+
+.ipv4_form {
+  display: flex;
+  margin-bottom: 1em;
+}
+
+section input,
+button {
+  padding: 0.5em 1em;
+  font: inherit;
+  color: inherit;
+  background: none;
+}
+
+section input {
+  border: 1px solid black;
+  flex: 1;
+}
+
+section button {
+  margin-left: 1em;
+  background-color: black;
+  color: white;
+  font-weight: 700;
+  border: none;
+}
+
+section button:hover {
+  background-color: darkgrey;
+  color: black;
+  cursor: pointer;
+}
+
+table {
+  margin-bottom: 2em;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+tr,
+td {
+  border: 1px solid black;
+}
+
+td {
+  padding: 0.2em;
+  width: 50%;
+}
+
+footer {
+  text-align: center;
+  color: darkgray;
+}

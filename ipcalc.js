@@ -46,12 +46,12 @@ function checkInput(input) {
     return true;
 }
 
-function renderWrongIpFeeback(){
+function renderWrongIpFeeback() {
     feedback.innerHTML = "Invalid IP";
     feedback.className = "alert alert-secondary";
 }
 
-function parseInput(input){
+function parseInput(input) {
     input = input.split("/");
 
     let ipInfo = {}
@@ -62,7 +62,7 @@ function parseInput(input){
     return ipInfo;
 }
 
-function initFeedback(){
+function initFeedback() {
     let feedback = document.querySelector("#feedback");
     feedback.innerHTML = "";
     feedback.className = "";
@@ -80,7 +80,7 @@ function calcIpv4(input) {
     return ipInfo;
 }
 
-function renderIpv4(ipInfo){
+function renderIpv4(ipInfo) {
     document.querySelector("#netmask").innerHTML = numberToAddr(ipInfo.subnetMask);
     document.querySelector("#network").innerHTML = numberToAddr(ipInfo.network);
     document.querySelector("#wildcard").innerHTML = numberToAddr(ipInfo.wildcard);
