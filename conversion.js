@@ -1,11 +1,10 @@
 export const addrToNumber = (addr) => {
     // convert ipv4 address from String in dot-decimal notation to Number
     // 192.168.0.1 -> 3232235521
-    const d = addr.split('.');
-
-    return (
-        d[0] * 256 ** 3 + d[1] * 256 ** 2 + d[2] * 256 + d[3]
-    );
+    return addr
+        .split('.')
+        .reverse()
+        .reduce((acc, val, i) => acc + Number(val) * 256 ** i, 0)
 }
 
 export const numberToAddr = (addr) => {
@@ -36,7 +35,7 @@ export const numberToCidr = (netmask) => {
     // 0x80000000 == 128.0.0.0 == /1
     for (let n = 0x80000000; (netmask & n) >>> 0 != 0; n >>>= 1) {
         cidr++;
-    }
+    };
 
     return cidr;
 }

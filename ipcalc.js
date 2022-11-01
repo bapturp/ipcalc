@@ -12,9 +12,14 @@ import {
     cidrToNumber,
 } from './conversion.js';
 
+
+const feedbackElement = document.querySelector("#feedback");
+const input = document.querySelector('input');
+
+
 const checkInput = (input) => {
     // return true if input is a valid IP Address CIDR notation else return false
-    let ipv4_regex =
+    const ipv4_regex =
         /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/gm;
 
     const cidr = input.split('/');
@@ -30,26 +35,16 @@ const checkInput = (input) => {
     return true;
 }
 
-const renderWrongIpFeeback = () => {
-    feedback.textContent = 'Invalid CIDR';
-}
-
 const parseInput = (input) => {
-    input = input.split('/');
+    const inputArr = input.split('/');
 
     const ipInfo = {}
 
-    ipInfo.address = addrToNumber(input[0]);
-    ipInfo.subnetMask = cidrToNumber(input[1]);
+    ipInfo.address = addrToNumber(inputArr[0]);
+    ipInfo.subnetMask = cidrToNumber(inputArr[1]);
 
     return ipInfo;
-}
-
-const initFeedback = () => {
-    const feedback = document.querySelector("#feedback");
-    feedback.textContent = '';
-    feedback.className = '';
-}
+};
 
 const calcIpv4 = (input) => {
     const ipInfo = parseInput(input);
@@ -74,15 +69,14 @@ const renderIpv4 = (ipInfo) => {
 }
 
 document.querySelector('#check').addEventListener('click', () => {
-    initFeedback()
+    feedbackElement.textContent = '';
 
-    const input = document.querySelector('input').value;
-    if (!checkInput(input)) {
-        renderWrongIpFeeback()
+    if (!checkInput(input.value)) {
+        feedbackElement.textContent = 'Invalid CIDR';
         return;
     }
 
-    const ipInfo = calcIpv4(input);
+    const ipInfo = calcIpv4(input.value);
 
     renderIpv4(ipInfo);
 });

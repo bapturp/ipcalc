@@ -1,18 +1,18 @@
 export const calcNetwork = (addr, netmask) => {
-    // return a network address
+    // return the network address
     // & -> bitwise AND
     return addr & netmask;
 }
 
 export const calcBroadcast = (network, netmask) => {
-    // return broadcast address
+    // return the broadcast address
     // | -> bitwise OR
     // ~ -> bitwise complement (NOT), inverts all bits 0101 -> 1010
     return network | ~netmask;
 }
 
 export const calcWildcard = (netmask) => {
-    // return wildcard (inverted netmask)
+    // return the wildcard mask (inverted netmask)
     // 255.255.255.0 -> 255.0.0.0
     return ~netmask;
 }
