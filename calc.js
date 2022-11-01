@@ -1,33 +1,33 @@
-export function calcNetwork(addr, netmask) {
+export const calcNetwork = (addr, netmask) => {
     // return a network address
     // & -> bitwise AND
     return addr & netmask;
 }
 
-export function calcBroadcast(network, netmask) {
+export const calcBroadcast = (network, netmask) => {
     // return broadcast address
     // | -> bitwise OR
     // ~ -> bitwise complement (NOT), inverts all bits 0101 -> 1010
     return network | ~netmask;
 }
 
-export function calcWildcard(netmask) {
+export const calcWildcard = (netmask) => {
     // return wildcard (inverted netmask)
     // 255.255.255.0 -> 255.0.0.0
     return ~netmask;
 }
 
-export function calcFirstAddr(network) {
+export const calcFirstAddr = (network) => {
     // return first assignable address
     return network + 1;
 }
 
-export function calcLastAddr(network, netmask) {
+export const calcLastAddr = (network, netmask) => {
     // return last assignable address
     return calcBroadcast(network, netmask) - 1;
 }
 
-export function calcRangeLength(netmask) {
+export const calcRangeLength = (netmask) => {
     // return full range length
     return ~netmask - 1;
 }
