@@ -119,20 +119,20 @@ const renderIpv4 = (ipInfo) => {
   document.querySelector("#range_length").textContent = ipInfo.rangeLength;
 };
 
-const feedbackElement = document.querySelector("#feedback");
-const input = document.querySelector("input");
+const notification = document.querySelector("#notification");
+const inputCidr = document.querySelector("input").value;
 
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
-  feedbackElement.textContent = "";
+  notification.textContent = "";
 
-  if (!checkInput(input.value)) {
-    feedbackElement.textContent = "Invalid CIDR";
-    setTimeout(() => (feedbackElement.textContent = ""), 5000);
+  if (!checkInput(inputCidr)) {
+    notification.textContent = "Invalid CIDR";
+    setTimeout(() => (notification.textContent = ""), 5000);
     return;
   }
 
-  const ipInfo = calcIpv4(input.value);
+  const ipInfo = calcIpv4(inputCidr);
 
   renderIpv4(ipInfo);
 });
