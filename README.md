@@ -2,7 +2,7 @@
 
 ## Introduction
 
-IpCalc is a small web app made in vanilla js that calculate various information on an IPv4 address.
+IpCalc is web app made that calculate ipv4 netmask and other related information.
 
 ## Features
 
