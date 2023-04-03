@@ -103,32 +103,40 @@ const renderIpv4 = (ipInfo) => {
   document.querySelector("#netmask").textContent = numberToAddr(
     ipInfo.subnetMask
   );
+
   document.querySelector("#network").textContent = numberToAddr(ipInfo.network);
+
   document.querySelector("#wildcard").textContent = numberToAddr(
     ipInfo.wildcard
   );
+
   document.querySelector("#broadcast").textContent = numberToAddr(
     ipInfo.broadcast
   );
+
   document.querySelector("#first_addr").textContent = numberToAddr(
     ipInfo.firstAddress
   );
+
   document.querySelector("#last_addr").textContent = numberToAddr(
     ipInfo.lastAddress
   );
+
   document.querySelector("#range_length").textContent = ipInfo.rangeLength;
 };
 
-const notification = document.querySelector("#notification");
+const setNotification = (message) =>
+  (document.querySelector("#notification").textContent = message);
+
 const inputCidr = document.querySelector("input").value;
 
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
-  notification.textContent = "";
+  setNotification("");
 
   if (!checkInput(inputCidr)) {
-    notification.textContent = "Invalid CIDR";
-    setTimeout(() => (notification.textContent = ""), 5000);
+    setNotification("Invalid CIDR");
+    setTimeout(() => setNotification(""), 5000);
     return;
   }
 
