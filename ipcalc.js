@@ -128,11 +128,11 @@ const renderIpv4 = (ipInfo) => {
 const setNotification = (message) =>
   (document.querySelector("#notification").textContent = message);
 
-const inputCidr = document.querySelector("input").value;
-
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
   setNotification("");
+
+  const inputCidr = document.querySelector("input").value;
 
   if (!checkInput(inputCidr)) {
     setNotification("Invalid CIDR");
