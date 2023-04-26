@@ -15,7 +15,7 @@ h1 {
 }
 
 section {
-  flex: 1 1 100%; /* flex-grow: 1; flex-shrink: 1; flex-basis: 100%; */
+  flex: 1 1 100%;
 }
 
 form {
@@ -79,4 +79,9 @@ footer {
 #notification {
   color: white;
   background-color: red;
+}
+
+.icon {
+  width: 1.4rem;
+  height: 1.4rem;
 }
