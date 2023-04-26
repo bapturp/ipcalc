@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="title" content="IPv4 Subnet calculator">
+    <meta name="description" content="ipcalc takes an ip address and netmask and calculates the resulting broadcast, network, wildcard and host range">
+    <meta name="keywords" content="ipv4,subnet,calculator,netmask">
     <title>IpCalc</title>
     <script src="ipcalc.js" type="module"></script>
     <link href="style.css" rel="stylesheet" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>"/>
   </head>
   <body>
-    <header>
       <h1>IpCalc</h1>
-    </header>
 
-    <section>
       <form autocomplete="off">
         <input name="ipv4" type="text" placeholder="192.168.0.1/24" />
         <button type="submit">Calc</button>
@@ -52,10 +52,9 @@
           <td id="last_addr"></td>
         </tr>
       </table>
-    </section>
 
     <footer>
-      <span>&copy 2023 Baptiste Dromer</span>
+      <span>&copy; 2023 Baptiste Dromer</span>
     </footer>
   </body>
 </html>
