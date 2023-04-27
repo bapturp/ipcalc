@@ -1,24 +1,24 @@
 // returns the network address
 // & -> bitwise AND
-const calcNetwork = (addr, netmask) => addr & netmask;
+const getNetwork = (addr, netmask) => addr & netmask;
 
 // returns the broadcast address
 // | -> bitwise OR
 // ~ -> bitwise complement (NOT), inverts all bits 0101 -> 1010
-const calcBroadcast = (network, netmask) => network | ~netmask;
+const getBroadcast = (network, netmask) => network | ~netmask;
 
 // returns the wildcard mask (inverted netmask)
 // 255.255.255.0 -> 255.0.0.0
-const calcWildcard = (netmask) => ~netmask;
+const getWildcard = (netmask) => ~netmask;
 
 // returns first assignable address
-const calcFirstAddr = (network) => network + 1;
+const getFirstAddr = (network) => network + 1;
 
 // returns last assignable address
-const calcLastAddr = (network, netmask) => calcBroadcast(network, netmask) - 1;
+const getLastAddr = (network, netmask) => getBroadcast(network, netmask) - 1;
 
 // returns full range length
-const calcRangeLength = (netmask) => ~netmask - 1;
+const getRangeLength = (netmask) => ~netmask - 1;
 
 // converts ipv4 address from String in dot-decimal notation to Number
 // 192.168.0.1 -> 3232235521
@@ -76,57 +76,42 @@ const checkInput = (input) => {
   return true;
 };
 
-const parseInput = (input) => {
-  const inputArr = input.split("/");
+const renderIpv4 = (inputCidr) => {
+  const ipAndMask = (inputCidr) => {
+    const [ipAddr, mask] = inputCidr.split("/");
+    return [addrToNumber(ipAddr), cidrToNumber(mask)];
+  };
 
-  const ipInfo = {};
+  const getIpv4Info = (ipAddr, netMask) => {
+    const network = getNetwork(ipAddr, netMask);
+    const wildcard = getWildcard(netMask);
+    const broadcast = getBroadcast(network, netMask);
+    const firstAddress = getFirstAddr(network);
+    const lastAddress = getLastAddr(network, netMask);
+    const rangeLength = getRangeLength(netMask);
 
-  ipInfo.address = addrToNumber(inputArr[0]);
-  ipInfo.subnetMask = cidrToNumber(inputArr[1]);
+    return {
+      network: numberToAddr(network),
+      netMask: numberToAddr(netMask),
+      wildcard: numberToAddr(wildcard),
+      broadcast: numberToAddr(broadcast),
+      firstAddress: numberToAddr(firstAddress),
+      lastAddress: numberToAddr(lastAddress),
+      rangeLength,
+    };
+  };
 
-  return ipInfo;
-};
+  const [ipAddr, netMask] = ipAndMask(inputCidr);
 
-const calcIpv4 = (input) => {
-  const ipInfo = parseInput(input);
-  ipInfo.network = calcNetwork(ipInfo.address, ipInfo.subnetMask);
-  ipInfo.wildcard = calcWildcard(ipInfo.subnetMask);
-  ipInfo.broadcast = calcBroadcast(ipInfo.network, ipInfo.subnetMask);
-  ipInfo.firstAddress = calcFirstAddr(ipInfo.network);
-  ipInfo.lastAddress = calcLastAddr(ipInfo.network, ipInfo.subnetMask);
-  ipInfo.rangeLength = calcRangeLength(ipInfo.subnetMask);
+  const ipInfo = getIpv4Info(ipAddr, netMask);
 
-  return ipInfo;
-};
-
-const renderIpv4 = (ipInfo) => {
-  document.querySelector("#netmask").textContent = numberToAddr(
-    ipInfo.subnetMask
-  );
-
-  document.querySelector("#network").textContent = numberToAddr(ipInfo.network);
-
-  document.querySelector("#wildcard").textContent = numberToAddr(
-    ipInfo.wildcard
-  );
-
-  document.querySelector("#broadcast").textContent = numberToAddr(
-    ipInfo.broadcast
-  );
-
-  document.querySelector("#first_addr").textContent = numberToAddr(
-    ipInfo.firstAddress
-  );
-
-  document.querySelector("#last_addr").textContent = numberToAddr(
-    ipInfo.lastAddress
-  );
-
-  document.querySelector("#range_length").textContent = ipInfo.rangeLength;
+  for (const [key, value] of Object.entries(ipInfo)) {
+    document.getElementById(key).textContent = value;
+  }
 };
 
 const setNotification = (message) =>
-  (document.querySelector("#notification").textContent = message);
+  (document.getElementById("notification").textContent = message);
 
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
@@ -134,13 +119,10 @@ document.querySelector("form").addEventListener("submit", (event) => {
 
   const inputCidr = document.querySelector("input").value;
 
-  if (!checkInput(inputCidr)) {
+  if (checkInput(inputCidr)) {
+    renderIpv4(inputCidr);
+  } else {
     setNotification("Invalid CIDR");
     setTimeout(() => setNotification(""), 5000);
-    return;
   }
-
-  const ipInfo = calcIpv4(inputCidr);
-
-  renderIpv4(ipInfo);
 });
