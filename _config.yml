@@ -1,0 +1,6 @@
+# jekyll configuration file
+
+exclude:
+  - README.md
+  - .prettierrc
+  - .gitignore
