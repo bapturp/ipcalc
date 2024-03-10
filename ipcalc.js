@@ -1,3 +1,5 @@
+const calculateNetmask = (mask) => 0xffffffff << (32 - parseInt(mask))
+
 const getNetwork = (addr, netmask) => addr & netmask
 
 const getBroadcast = (network, netmask) => network | ~netmask
@@ -10,84 +12,60 @@ const getLastAddr = (network, netmask) => (network | ~netmask) - 1
 
 const getRangeLength = (netmask) => ~netmask - 1
 
-const addrToNumber = (addr) =>
-  addr
-    .split(".")
-    .reverse()
-    .reduce((acc, val, i) => acc + Number(val) * 256 ** i, 0)
-
-const numberToAddr = (addr) => {
-  const bytes = []
-
-  bytes[0] = (addr >>> 24) & 0xff
-  bytes[1] = (addr >>> 16) & 0xff
-  bytes[2] = (addr >>> 8) & 0xff
-  bytes[3] = addr & 0xff
-
-  return bytes.join(".")
-}
-
-const cidrToNumber = (netmask) => 0xffffffff << (32 - netmask)
-
-const numberToCidr = (netmask) => {
-  let cidr = 0
-
-  for (let n = 0x80000000; (netmask & n) >>> 0 != 0; n >>>= 1) {
-    cidr++
+const convertIPv4 = (ip, direction) => {
+  switch (direction) {
+    case "addrToNumber":
+      return ip
+        .split(".")
+        .reverse()
+        .reduce((acc, val, i) => acc + Number(val) * 256 ** i, 0)
+    case "numberToAddr":
+      const bytes = []
+      bytes[0] = (ip >>> 24) & 0xff
+      bytes[1] = (ip >>> 16) & 0xff
+      bytes[2] = (ip >>> 8) & 0xff
+      bytes[3] = ip & 0xff
+      return bytes.join(".")
   }
-
-  return cidr
 }
 
-const checkInput = (input) => {
+const validateCIDR = (input) => {
   const reIpv4 =
     /^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/gm
 
   const cidr = input.split("/")
 
-  if (cidr.length !== 2) return false
-
-  if (!reIpv4.test(cidr[0])) return false
-
-  if (isNaN(cidr[1])) return false
-
-  if (cidr[1] <= 0 || cidr[1] >= 32) return false
-
-  return true
+  if (cidr.length !== 2) throw new Error("Invalid CIDR format")
+  if (!reIpv4.test(cidr[0])) throw new Error("Invalid IPv4 address")
+  if (isNaN(cidr[1])) throw new Error("Invalid netmask")
+  if (cidr[1] <= 0 || cidr[1] >= 32) throw new Error("Netmask out of range")
 }
 
-const renderIpv4 = (inputCidr) => {
-  const ipAndMask = (inputCidr) => {
-    const [ipAddr, mask] = inputCidr.split("/")
-    return [addrToNumber(ipAddr), cidrToNumber(mask)]
+const renderIPv4 = (inputCIDR) => {
+  try {
+    validateCIDR(inputCIDR)
+  } catch (error) {
+    setNotification(error.message)
+    setTimeout(() => setNotification(""), 5000)
+    return
   }
 
-  const getIpv4Info = (ipAddr, netMask) => {
-    const network = getNetwork(ipAddr, netMask)
-    const wildcard = getWildcard(netMask)
-    const broadcast = getBroadcast(network, netMask)
-    const firstAddress = getFirstAddr(network)
-    const lastAddress = getLastAddr(network, netMask)
-    const rangeLength = getRangeLength(netMask)
+  const [ipString, netmaskString] = inputCIDR.split("/")
+  const ip = convertIPv4(ipString, "addrToNumber")
+  const netmask = calculateNetmask(netmaskString)
+  const network = getNetwork(ip, netmask)
 
-    const ipInfo = {
-      network: numberToAddr(network),
-      netMask: numberToAddr(netMask),
-      wildcard: numberToAddr(wildcard),
-      broadcast: numberToAddr(broadcast),
-      firstAddress: numberToAddr(firstAddress),
-      lastAddress: numberToAddr(lastAddress),
-      rangeLength,
-    }
-
-    return ipInfo
+  const IPInfo = {
+    network: convertIPv4(network, "numberToAddr"),
+    netmask: convertIPv4(netmask, "numberToAddr"),
+    wildcard: convertIPv4(getWildcard(netmask), "numberToAddr"),
+    broadcast: convertIPv4(getBroadcast(network, netmask), "numberToAddr"),
+    firstAddress: convertIPv4(getFirstAddr(network), "numberToAddr"),
+    lastAddress: convertIPv4(getLastAddr(network, netmask), "numberToAddr"),
+    rangeLength: getRangeLength(netmask),
   }
 
-  const [ipAddr, netMask] = ipAndMask(inputCidr)
-
-  const ipInfo = getIpv4Info(ipAddr, netMask)
-
-  for (const [key, value] of Object.entries(ipInfo)) {
+  for (const [key, value] of Object.entries(IPInfo)) {
     document.getElementById(key).textContent = value
   }
 }
@@ -99,12 +77,7 @@ document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault()
   setNotification("")
 
-  const inputCidr = document.getElementById("inputCidr").value
+  const inputCIDR = document.getElementById("input-cidr").value
 
-  if (checkInput(inputCidr)) {
-    renderIpv4(inputCidr)
-  } else {
-    setNotification("Invalid CIDR")
-    setTimeout(() => setNotification(""), 5000)
-  }
+  renderIPv4(inputCIDR)
 })
