@@ -10,7 +10,7 @@ const getFirstAddr = (network) => network + 1
 
 const getLastAddr = (network, netmask) => (network | ~netmask) - 1
 
-const getRangeLength = (netmask) => ~netmask - 1
+const getUsableHosts = (netmask) => ~netmask - 1
 
 const convertIPv4 = (ip, direction) => {
   switch (direction) {
@@ -55,17 +55,17 @@ const renderIPv4 = (inputCIDR) => {
   const netmask = calculateNetmask(netmaskString)
   const network = getNetwork(ip, netmask)
 
-  const IPInfo = {
+  const IPv4Info = {
     network: convertIPv4(network, "numberToAddr"),
     netmask: convertIPv4(netmask, "numberToAddr"),
     wildcard: convertIPv4(getWildcard(netmask), "numberToAddr"),
     broadcast: convertIPv4(getBroadcast(network, netmask), "numberToAddr"),
     firstAddress: convertIPv4(getFirstAddr(network), "numberToAddr"),
     lastAddress: convertIPv4(getLastAddr(network, netmask), "numberToAddr"),
-    rangeLength: getRangeLength(netmask),
+    rangeLength: getUsableHosts(netmask),
   }
 
-  for (const [key, value] of Object.entries(IPInfo)) {
+  for (const [key, value] of Object.entries(IPv4Info)) {
     document.getElementById(key).textContent = value
   }
 }
