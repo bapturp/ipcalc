@@ -26,7 +26,7 @@
     <section>
       <form autocomplete="off">
         <input
-          id="input-cidr"
+          id="inputCIDR"
           name="ipv4"
           type="text"
           placeholder="192.168.0.1/24"
@@ -34,7 +34,7 @@
         <button type="submit">Calc</button>
       </form>
 
-      <div id="notification"></div>
+      <div id="errorMessage"></div>
 
       <table>
         <tr>
@@ -54,8 +54,8 @@
           <td id="wildcard"></td>
         </tr>
         <tr>
-          <td>Usable adresses</td>
-          <td id="rangeLength"></td>
+          <td>Usable hosts</td>
+          <td id="usableHosts"></td>
         </tr>
         <tr>
           <td>First address</td>
