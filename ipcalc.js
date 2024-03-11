@@ -2,7 +2,7 @@
 const calculateNetmask = (mask) => 0xffffffff << (32 - parseInt(mask))
 
 // calculate the network address
-const getNetwork = (addr, netmask) => addr & netmask
+const getNetwork = (ip, netmask) => ip & netmask
 
 // calculate the broadcast address
 const getBroadcast = (network, netmask) => network | ~netmask
@@ -69,16 +69,16 @@ const renderIPv4 = (inputCIDR) => {
       document.getElementById(key).textContent = value
     }
   } catch (error) {
-    setNotification(error.message)
-    setTimeout(() => setNotification(""), 5000)
+    errorMessage(error.message)
+    setTimeout(() => errorMessage(""), 5000)
   }
 }
 
-const setNotification = (message) =>
-  (document.getElementById("notification").textContent = message)
+const errorMessage = (message) =>
+  (document.getElementById("errorMessage").textContent = message)
 
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault()
-  setNotification("")
+  errorMessage("")
   renderIPv4(document.getElementById("inputCIDR").value)
 })
